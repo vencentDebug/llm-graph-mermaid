@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "title": "用户登录流程",
+  "description": "带验证码校验与失败锁定策略的标准登录流程（内置示例）",
+  "direction": "TB",
+  "nodes": [
+    { "id": "n1", "label": "开始", "type": "start" },
+    { "id": "n2", "label": "输入账号密码与验证码", "type": "process" },
+    { "id": "n3", "label": "验证码是否正确", "type": "decision" },
+    { "id": "n4", "label": "密码是否正确", "type": "decision" },
+    { "id": "n5", "label": "失败次数 +1", "type": "process" },
+    { "id": "n6", "label": "连续失败达 5 次", "type": "decision" },
+    { "id": "n7", "label": "锁定账号 30 分钟", "type": "subprocess" },
+    { "id": "n8", "label": "登录成功，跳转首页", "type": "end" }
+  ],
+  "edges": [
+    { "from": "n1", "to": "n2" },
+    { "from": "n2", "to": "n3" },
+    { "from": "n3", "to": "n4", "label": "通过" },
+    { "from": "n3", "to": "n2", "label": "不通过" },
+    { "from": "n4", "to": "n8", "label": "正确" },
+    { "from": "n4", "to": "n5", "label": "错误" },
+    { "from": "n5", "to": "n6" },
+    { "from": "n6", "to": "n7", "label": "是" },
+    { "from": "n6", "to": "n2", "label": "否" },
+    { "from": "n7", "to": "n2", "label": "锁定到期后重试" }
+  ]
+}
